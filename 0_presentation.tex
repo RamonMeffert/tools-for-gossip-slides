@@ -6,12 +6,12 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage[british]{babel}
-\usepackage[backend=biber,style=alphabetic-verb,citetracker=true]{biblatex}
+\usepackage[backend=biber,style=apa,citetracker=true]{biblatex}
 \usepackage{csquotes}
 \usepackage{hyperref}
 \usepackage[overlay, absolute]{textpos}
 \usepackage{tikz}
-\usepackage{graphicx}
+\usepackage{array,multirow,graphicx}
 \usepackage{booktabs}
 \usepackage{subcaption}
 \usepackage{transparent}
@@ -33,13 +33,16 @@
 \usecolortheme{seagull}
 
 % Use symbols instead of numbers for footnotes
-\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+% \renewcommand{\thefootnote}{\fnsymbol{footnote}}
 
 % don't show Beamer buttons
 \beamertemplatenavigationsymbolsempty
 
 % more spacing below footnotes
-\setbeamertemplate{footline}{\vspace{6.7pt}} 
+\setbeamertemplate{footline}{\vspace{6.7pt}}
+
+% make captions numbered (beamer by default uses Figure: caption instead of Figure 1: caption)
+\setbeamertemplate{caption}[numbered]
 
 %Information to be included in the title page:
 \title{Tools for Gossip} 
@@ -53,62 +56,55 @@
 
 \begin{document}
 {\setbeamertemplate{background}
-{\transparent{0.2}\includegraphics[width=\paperwidth,keepaspectratio]{phone.jpg}}
+{\transparent{0.2}\includegraphics[width=\paperwidth,keepaspectratio]{images/phone.jpg}}
 \frame{\titlepage}
 }
 \begin{frame}[c]{About this bachelor's project}
     \begin{multicols}{2}
         \begin{itemize}
-            \item<1-> The telephone problem \parencite[e.g.][]{tijdeman_telephone_1971}
-            \item<2-> Dynamic gossip \cite{van_ditmarsch_dynamic_2018}
-            \item<3-> Goal: intuitive, educational tool
+            \item<1-> The telephone problem \only<1->{\footcite[e.g.][]{tijdeman_telephone_1971}}
+            \item<2-> Dynamic gossip \only<2->{\footcite{van_ditmarsch_dynamic_2018}}
+            \item<3-> Goal: easy-to-use educational tool
         \end{itemize}
         \columnbreak
-        \includegraphics[width=\linewidth]{telephones.jpg}
-        \end{multicols}
+        \begin{figure}
+            \includegraphics[width=\linewidth]{images/agents.jpg}
+            \caption{Two agents merging their secrets}
+        \end{figure}
+    \end{multicols}
+    \begin{textblock*}{.5\paperwidth}[1,1](.99\paperwidth,.98\paperheight)
+            \hfill \tiny\textcolor{gray!50}{Image credit: people photo created by shurkin\_son - www.freepik.com}
+    \end{textblock*}
 \end{frame}
 %--- Next Frame ---%
 \begin{frame}[c]{Why dynamic gossip?}
     \begin{figure}
       \begin{subfigure}[t]{.3\paperwidth}
         \centering
-        \includegraphics[height=.3\paperheight]{bitcoin.png}
-        \caption*{Blockchain \cite{baird_swirlds_2016,van_renesse_blockchain_2016}}
+        \includegraphics[height=.3\paperheight]{images/bitcoin.png}
+        \caption*{Blockchain}
       \end{subfigure}
       \qquad
       \begin{subfigure}[t]{.3\paperwidth}
         \centering
-        \includegraphics[height=.3\paperheight]{ssbc.png}
-        \caption*{Social Media \cite{tarr_secure_2019}}
+        \includegraphics[height=.3\paperheight]{images/ssbc.png}
+        \caption*{Social Media}
       \end{subfigure}
 
       \bigskip
 
       \begin{subfigure}[t]{.3\paperwidth}
         \centering
-        \includegraphics[height=.3\paperheight]{dna.png}
-        \caption*{Genome analysis \cite{liben-nowell_gossip_2002}}
+        \includegraphics[height=.3\paperheight]{images/dna.png}
+        \caption*{Genome analysis}
       \end{subfigure}
       \qquad
       \begin{subfigure}[t]{.3\paperwidth}
         \centering
-        \includegraphics[height=.3\paperheight]{network.pdf}
-        \caption*{Distributed databases \cite{das_swim_2002,decandia_dynamo_2007}}
+        \includegraphics[height=.3\paperheight]{images/network.pdf}
+        \caption*{Distributed databases}
       \end{subfigure}
     \end{figure}
-\end{frame}
-%--- Next Frame ---%
-\begin{frame}[c]{Some notation}
-    \centering\Large
-    \begin{tabular}{ll}
-         Agents          & $A = \{ a, b, \dots \}$\\\pause
-         Number relation & $N \subseteq A \times A$\\\pause
-         Secret relation & $S \subseteq A \times A$\\\pause
-         Gossip graph    & $G = (A, N, S)$\\\pause
-         Call            & $ab$\\\pause
-         Identity relation & $I_A = \{\ (x, x) \mid x \in A\ \}$\\
-    \end{tabular}
-    \vfill
 \end{frame}
 %--- Next Frame ---%
 \begin{frame}[c]{Example}
@@ -199,7 +195,7 @@
         \end{tikzpicture}
     }
     \begin{align*}
-        N &= A \times A \\
+        N &= A^2 \\
         S &= I_A \cup \{ (a, b), (a, c), (b, a), (c, a)\}
     \end{align*}
 \end{frame}
@@ -231,44 +227,47 @@
         \end{tikzpicture}
     }
     \begin{align*}
-        N &= A \times A \\
-        S &= A \times A
+        N &= A^2 \\
+        S &= A^2
     \end{align*}
 \end{frame}
 %--- Next Frame ---%
 \begin{frame}[t]{The tool}
-    \includegraphics[width=\linewidth]{tool.png}
+    \includegraphics[width=\linewidth]{images/tool.png}
+\end{frame}
+%--- Next Frame ---%
+\begin{frame}[t]{Graph visualisation}
+    \includegraphics[width=\linewidth]{images/tool-graph.png}
+\end{frame}
+%--- Next Frame ---%
+\begin{frame}[t]{Gossip protocols}
+    \includegraphics[width=\linewidth]{images/tool-protocol.png}
+\end{frame}
+%--- Next Frame ---%
+\begin{frame}[t]{Call sequence validation \& execution}
+    \includegraphics[width=\linewidth]{images/tool-sequence.png}
+\end{frame}
+%--- Next Frame ---%
+\begin{frame}[t]{Execution tree}
+    \includegraphics[width=\linewidth]{images/tool-history.png}
 \end{frame}
 %--- Next Frame ---%
 \begin{frame}[c]{Implementation}
     \begin{multicols}{2}
         \begin{itemize}
-            \item<1-> Language: Elm \cite{czaplicki_asynchronous_2013}
-            \item<2-> Graph visualisation \& properties
-            \item<3-> Execution tree
-            \item<4-> Call sequence validation \& execution
-            \item<5-> Custom protocol creation\only<5->\footnote{In last phase of development}
-        \end{itemize}
-        \columnbreak
-        \begin{figure}
-            \centering
-            \includegraphics[width=.5\linewidth]{Elm_logo.pdf}
-        \end{figure}
-    \end{multicols}
-\end{frame}
-%--- Next Frame ---%
-\begin{frame}[c]{Why Elm fits this project}
-    \begin{multicols}{2}
-        \begin{itemize}
-            \item<1-> Pure functions
+            \item<1-> Language: Elm \footcite{czaplicki_asynchronous_2013}
+            \begin{itemize}
+                \item Open source, functional web language
+            \end{itemize}
+            \item<2-> Pure functions
             \begin{itemize}
                 \item Easier to translate mathematical functions into code
             \end{itemize}
-            \item<2-> Compiled to Javascript
+            \item<3-> Compiled to Javascript
             \begin{itemize}
                 \item Free cross-platform compatibility
             \end{itemize}
-            \item<3-> Static type checking
+            \item<4-> Static type checking
             \begin{itemize}
                 \item Zero runtime exceptions
             \end{itemize}
@@ -276,7 +275,7 @@
         \columnbreak
         \begin{figure}
             \centering
-            \includegraphics[width=.5\linewidth]{Elm_logo.pdf}
+            \includegraphics[width=.5\linewidth]{images/Elm_logo.pdf}
         \end{figure}
     \end{multicols}
 \end{frame}
@@ -292,76 +291,84 @@
         \columnbreak
         \begin{figure}
             \centering
-            \includegraphics[width=\linewidth]{survey.jpg}
+            \includegraphics[width=\linewidth]{images/survey.jpg}
         \end{figure}
     \end{multicols}
 \end{frame}
 %--- Next Frame ---%
-\begin{frame}[c]{Survey}
+\begin{frame}[c]{Survey results}
     \begin{figure}
         \centering
-        \includegraphics[width=.7\linewidth]{results.png}
-        \caption*{
-            \scriptsize Some results from the survey. First question was (1 = very bad) to (5 = very good), second 
-            question was (1 = not useful at all) to (5 = very useful), last question was (1 = very little time) to 
-            (5 = very much time). For more results, please refer to the thesis.
-        }
+        \includegraphics[width=.8\linewidth]{images/survey-likert.pdf}
+    \end{figure}
+\end{frame}
+%--- Next Frame ---%
+\begin{frame}[c]{Survey results}
+    \begin{figure}
+        \begin{subfigure}{.4\paperwidth}
+            \centering
+            \includegraphics[width=.7\linewidth]{images/survey-study.pdf}
+            \bigskip
+            \caption*{\centering Do you think this tool could be useful in a study setting?}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{.4\paperwidth}
+            \centering
+            \includegraphics[width=.7\linewidth]{images/survey-research.pdf}
+            \bigskip
+            \caption*{\centering Do you think this tool could be useful in a research setting?}
+        \end{subfigure}
     \end{figure}
 \end{frame}
 %--- Next Frame ---%
 \begin{frame}[c]{Further research and extensions}
     \begin{multicols}{2}
         \begin{itemize}
-            \item<1-> Unreliable gossip \cite{martins_dealing_2020}
-            \item<2-> Higher level knowledge \cite{herzig_how_2017}
-            \item<3-> Temporal gossip \cite{slavkovik_temporal_2019}
+            \item<1-> Unreliable gossip \footcite{martins_dealing_2020}
+            \item<2-> Higher level knowledge \footcite{herzig_how_2017}
+            \item<3-> Temporal gossip \footcite{slavkovik_temporal_2019}
             \item<4-> And more!
         \end{itemize}
         \columnbreak
         \begin{figure}
             \centering
-            \includegraphics[width=\linewidth]{sattelite.jpg}
+            \includegraphics[width=\linewidth]{images/sattelite.jpg}
         \end{figure}
     \end{multicols}
 \end{frame}
 %--- Next Frame ---%
-\begin{frame}[t]
-    \Huge
-    \vfill
-    \vfill
-    \begin{center}
-        Demo
-    \end{center}
-    \vfill
+\begin{frame}[c]{Summary}
+    \begin{multicols}{2}
+        \begin{itemize}
+            \item Tool for exploring dynamic gossip
+            \begin{itemize}
+                \item Graph visualisation
+                \item Gossip protocols
+                \item Call (sequence) evaluation \& execution
+                \item Execution tree
+            \end{itemize}
+            \item Positively evaluated
+            \item Open source + free license (GPLv3)
+        \end{itemize}
+        \columnbreak
+        \begin{figure}
+            \centering
+            \includegraphics[width=.55\linewidth]{images/graph.png}
+        \end{figure}
+    \end{multicols}
 \end{frame}
-%--- Next Frame ---%
-\begin{frame}[b]
+\begin{frame}[c]{Quick links}
     \begin{center}
-        {\Large Thanks for your attention!}
-        
-        \bigskip
-        
-        Questions?
-        
-        \bigskip        
-        \bigskip
-        
-        \small
-        \begin{tabular}{lll}
-                & Result 
-                & Source code \vspace{5pt}\\
-            Tool    
-                & \href{https://r3n.nl/bsc/gossip}{\textcolor{gray}{r3n.nl/bsc}/gossip}
-                & \href{https://r3n.nl/bsc/src/gossip}{\textcolor{gray}{r3n.nl/bsc/src}/gossip} \vspace{5pt}\\
-            Thesis\footnote{From February 1}  
-                & \href{https://r3n.nl/bsc/thesis}{\textcolor{gray}{r3n.nl/bsc}/thesis} 
-                & \href{https://r3n.nl/bsc/src/thesis}{\textcolor{gray}{r3n.nl/bsc/src}/thesis} \vspace{5pt}\\
-            Slides  
-                & \href{https://r3n.nl/bsc/slides}{\textcolor{gray}{r3n.nl/bsc}/slides} 
-                & \href{https://r3n.nl/bsc/src/slides}{\textcolor{gray}{r3n.nl/bsc/src}/slides} \\
-        \end{tabular}
-        
-        \bigskip
+        \begin{tabular}{rll}
+                                    & \multicolumn{1}{c}{\scriptsize RESULT}                                & \multicolumn{1}{c}{\scriptsize SOURCE CODE}\vspace{5pt}\\
+            {\scriptsize TOOL}      & \href{https://r3n.nl/bsc/gossip}{\textcolor{gray}{r3n.nl/bsc}/gossip} & \href{https://r3n.nl/bsc/src/gossip}{\textcolor{gray}{r3n.nl/bsc}/src/gossip}\vspace{5pt}\\
+            {\scriptsize THESIS}    & \href{https://r3n.nl/bsc/thesis}{\textcolor{gray}{r3n.nl/bsc}/thesis} & \href{https://r3n.nl/bsc/src/thesis}{\textcolor{gray}{r3n.nl/bsc}/src/thesis}\vspace{5pt}\\
+            {\scriptsize SLIDES}    & \href{https://r3n.nl/bsc/slides}{\textcolor{gray}{r3n.nl/bsc}/slides} & \href{https://r3n.nl/bsc/src/slides}{\textcolor{gray}{r3n.nl/bsc}/src/slides}
+         \end{tabular}
+          
+         \bigskip
+          
+         \textcolor{gray}{\tiny Thesis will be available after Februari 1st, slides after today}
     \end{center}
 \end{frame}
 %--- Next Frame ---%
